@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruh Gaming</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:#0b1120;
+    color:white;
+}
+
+/* NAVBAR */
+.nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 20px;
+    background:#020617;
+    position:sticky;
+    top:0;
+}
+
+.logo{font-size:22px;font-weight:bold}
+
+.menu{
+    display:flex;
+    gap:20px;
+}
+
+.menu a{color:white;text-decoration:none}
+
+/* MOBILE MENU */
+.hamburger{
+    display:none;
+    font-size:24px;
+    cursor:pointer;
+}
+
+.mobile{
+    display:none;
+    flex-direction:column;
+    background:#020617;
+    padding:10px;
+    animation:slide .3s ease;
+}
+
+@keyframes slide{
+    from{opacity:0; transform:translateY(-10px)}
+    to{opacity:1; transform:translateY(0)}
+}
+
+/* HERO */
+.hero{
+    text-align:center;
+    padding:80px 20px;
+}
+
+.btn{
+    background:#38bdf8;
+    padding:10px 20px;
+    border-radius:20px;
+    cursor:pointer;
+    display:inline-block;
+}
+
+/* CARDS */
+.section{max-width:900px;margin:auto;padding:30px}
+
+.card{
+    background:#1e293b;
+    padding:20px;
+    border-radius:12px;
+    margin:15px 0;
+    transition:.3s;
+}
+.card:hover{transform:scale(1.03)}
+
+/* ADMIN */
+.admin-panel{
+    display:none;
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
+
+input,button{
+    padding:8px;
+    margin:5px;
+}
+
+.user{
+    background:#020617;
+    padding:10px;
+    margin:10px 0;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="nav">
+<div class="logo">🎮 Ruh Gaming</div>
+
+<div class="menu">
+<a href="#">Ana Sayfa</a>
+<a href="#">Oyunlar</a>
+<a href="#" onclick="showAdmin()">Admin</a>
+</div>
+
+<div class="hamburger" onclick="toggleMenu()">☰</div>
+</div>
+
+<div class="mobile" id="mobileMenu">
+<a href="#">Ana Sayfa</a>
+<a href="#">Oyunlar</a>
+<a href="#" onclick="showAdmin()">Admin</a>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+<h1>Oyun Dünyama Hoş Geldin</h1>
+<p>Rehberler ve içerikler</p>
+<div class="btn" onclick="alert('Oyunlar yakında!')">Keşfet</div>
+</div>
+
+<!-- OYUNLAR -->
+<div class="section">
+<div class="card">
+<h3>Roblox</h3>
+<p>Rehberler ve ipuçları</p>
+</div>
+</div>
+
+<!-- ADMIN LOGIN -->
+<div class="section" id="login">
+<h2>Admin Giriş</h2>
+<input id="user" placeholder="Kullanıcı">
+<input id="pass" placeholder="Şifre" type="password">
+<button onclick="login()">Giriş</button>
+<p id="msg"></p>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-panel" id="adminPanel">
+<h2>Admin Paneli</h2>
+<button onclick="logout()">Çıkış</button>
+<div id="users"></div>
+</div>
+
+<script>
+let adminUser="admin"
+let adminPass="1234"
+
+let users=[
+    {name:"oyuncu1", pass:"111", banned:false},
+    {name:"oyuncu2", pass:"222", banned:false}
+]
+
+function toggleMenu(){
+    let m=document.getElementById("mobileMenu")
+    m.style.display=m.style.display==="flex"?"none":"flex"
+}
+
+function login(){
+    let u=document.getElementById("user").value
+    let p=document.getElementById("pass").value
+
+    if(u===adminUser && p===adminPass){
+        document.getElementById("login").style.display="none"
+        document.getElementById("adminPanel").style.display="block"
+        renderUsers()
+    }else{
+        document.getElementById("msg").innerText="Hatalı giriş"
+    }
+}
+
+function logout(){
+    location.reload()
+}
+
+function renderUsers(){
+    let container=document.getElementById("users")
+    container.innerHTML=""
+
+    users.forEach((u,i)=>{
+        let div=document.createElement("div")
+        div.className="user"
+        div.innerHTML=`
+        <b>${u.name}</b> | Şifre: ${u.pass} | 
+        Durum: ${u.banned?"BANLI":"Aktif"}
+        <br>
+        <button onclick="ban(${i})">Ban</button>
+        <button onclick="kick(${i})">Kick</button>
+        `
+        container.appendChild(div)
+    })
+}
+
+function ban(i){
+    users[i].banned=true
+    renderUsers()
+}
+
+function kick(i){
+    alert(users[i].name+" oyundan atıldı (simülasyon)")
+}
+
+function showAdmin(){
+    window.scrollTo(0,document.body.scrollHeight)
+}
+</script>
+
+</body>
+</html>
